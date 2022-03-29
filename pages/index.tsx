@@ -1,13 +1,16 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import { useEffect } from 'react'
 import useNotifications from '../hooks/useNotifications'
+import { auth } from '../services/auth'
 import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {
-  const oauthUrl = 'https://auth.atlassian.com/authorize?audience=api.atlassian.com&client_id=q7BPfsrFgPvZPMVOSoqIEoT49ajnSIOh&scope=read%3Ame&redirect_uri=https%3A%2F%2Fbitbucket-dashboard.vercel.app&response_type=code&prompt=consent'
 
-  const { send } = useNotifications();
+  useEffect(() => {
+    auth()
+  }, [])
 
   return (
     <div className={styles.container}>
