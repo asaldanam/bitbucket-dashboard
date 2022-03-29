@@ -14,6 +14,7 @@ export default async function handler(
 ) {
   try {
     const { code } = req.query;
+    console.log(code);
     const headers = { 'Content-Type': 'application/json' }
     const body = {
       "grant_type": "authorization_code",
