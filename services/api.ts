@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { getAccessToken } from './auth';
+import { getCredentials } from './auth';
 
 const Api = axios.create({
   headers: {
-    'Authorization': `Bearer ${getAccessToken()}`,
+    'Authorization': `Bearer ${getCredentials()}`,
     'Accept': 'application/json'
   }
 })

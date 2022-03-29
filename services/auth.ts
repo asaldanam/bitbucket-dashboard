@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Credentials } from "../pages/api/oauth/token";
 
 export async function auth() {
   const credentials = getCredentials();
@@ -7,20 +8,7 @@ export async function auth() {
   const code = getCode();
   if (!code) goToAtlassianOAuth();
 
-  const headers = { 'Content-Type': 'application/json' }
-  const body = {
-    "grant_type": "authorization_code",
-    "client_id": config.CLIENT_ID,
-    "client_secret": config.CLIENT_SECRET,
-    "code": code,
-    "redirect_uri": config.REDIRECT_URI
-  }
-
-  const res = await axios.post<Credentials>(
-    'https://auth.atlassian.com/oauth/token', 
-    { headers, body }
-  )
-
+  const res = await axios.get<Credentials>('/api/oauth/token', { params: { code } })
   window.localStorage.setItem('credentials', JSON.stringify(res));
   
   return res;
@@ -28,7 +16,7 @@ export async function auth() {
 
 export function getCredentials() {
   const credentials = window.localStorage.getItem('credentials');
-  return JSON.parse(credentials || '') || null;
+  return JSON.parse(credentials || 'null');
 }
 
 export function getCode() {
@@ -45,20 +33,7 @@ export function getCode() {
 }
 
 function goToAtlassianOAuth() {
-  window.location.href = `
-    https://auth.atlassian.com/authorize
-      ?audience=api.atlassian.com
-      &client_id=${config.CLIENT_ID}
-      &redirect_uri=${config.REDIRECT_URI}
-      &response_type=code
-      &prompt=consent
-  `
-}
-
-interface Credentials {
-  "access_token": string,
-  "expires_in": number;
-  "scope": string;
+  window.location.href = `https://auth.atlassian.com/authorize?audience=api.atlassian.com&client_id=${config.CLIENT_ID}&redirect_uri=${config.REDIRECT_URI}&response_type=code&prompt=consent`
 }
 
 const config = {

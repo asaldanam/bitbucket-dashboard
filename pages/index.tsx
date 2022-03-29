@@ -12,6 +12,8 @@ const Home: NextPage = () => {
     auth()
   }, [])
 
+  const { send } = useNotifications()
+
   return (
     <div className={styles.container}>
       <Head>
@@ -29,13 +31,6 @@ const Home: NextPage = () => {
           Get started by editing{' '}
           <code className={styles.code}>pages/index.tsx</code>
         </p>
-
-        <div className={styles.grid}>
-          <a href={oauthUrl} className={styles.card}>
-            <h2>Sign in &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-        </div>
 
         <button onClick={() => send('asdfasdfasdf')}>displayNotification</button>
       </main>

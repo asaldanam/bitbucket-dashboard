@@ -2,7 +2,7 @@
 self.addEventListener("install", App);
 
 function App() {
-  initPolling();
+  // initPolling();
 }
 
 function initPolling() {
