@@ -14,7 +14,7 @@ export default async function handler(
 ) {
   try {
     const { code } = req.query;
-    console.log(code);
+
     const headers = { 'Content-Type': 'application/json' }
     const body = {
       "grant_type": "authorization_code",
@@ -26,11 +26,13 @@ export default async function handler(
 
     const { data } = await axios.post<Credentials>(
       'https://auth.atlassian.com/oauth/token', 
-      { headers, body }
+      body,
+      { headers }
     )
 
     res.status(200).json(data)
   } catch (e: any) {
+    console.error(e)
     res.status(e.response.status).json(e)
   }
 }
