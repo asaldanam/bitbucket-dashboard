@@ -8,10 +8,16 @@ export async function auth() {
   const code = getCode();
   if (!code) goToAtlassianOAuth();
 
-  const res = await axios.get<Credentials>('/api/oauth/token', { params: { code } })
-  window.localStorage.setItem('credentials', JSON.stringify(res));
-  
-  return res;
+  try {
+      const { data } = await axios.get<Credentials>('/api/oauth/token', { params: { code } })
+      window.localStorage.setItem('credentials', JSON.stringify(data));
+  } catch (e: any) {
+    localStorage.removeItem('credentials')
+    localStorage.removeItem('code');
+    window.history.pushState({}, document.title, window.location.pathname);
+
+    goToAtlassianOAuth();
+  }
 }
 
 export function getCredentials() {
