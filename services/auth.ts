@@ -1,43 +1,67 @@
-import axios from "axios";
-import { Credentials } from "../pages/api/oauth/token";
+const CLIENT_ID = 'V3CkunMvVKj2zDKHzQ';
+const STORAGE_KEY = 'auth';
 
 export async function auth() {
-  const credentials = getCredentials();
-  if (credentials) return;
-
-  const code = getCode();
-  if (!code) goToAtlassianOAuth();
-
   try {
-      const { data } = await axios.get<Credentials>('/api/oauth/token', { params: { code } })
-      window.localStorage.setItem('credentials', JSON.stringify(data));
-  } catch (e: any) {
-    localStorage.removeItem('credentials')
-    localStorage.removeItem('code');
-    window.history.pushState({}, document.title, window.location.pathname);
+    // Check if has credentials in localstorage
+    const credentials = getCredentials();
+    if (credentials) return;
 
-    goToAtlassianOAuth();
+    // Check if has credentials in url
+    if (hasTokenInUrl()) {
+      saveCredentialsToStorage();
+      return;
+    }
+
+    // Finally, if not logued yet, redirects to login
+    redirectToLogin();
+  } catch (error) {
+    console.error(error)
   }
 }
 
 export function getCredentials() {
-  const credentials = window.localStorage.getItem('credentials');
-  return JSON.parse(credentials || 'null');
-}
-
-export function getCode() {
-  const codeSaved = window.localStorage.getItem('code') as string;
-  if (codeSaved) return codeSaved;
-
-  const params = new URLSearchParams(window.location.search)
-  const codeFromParams = params.get('code');
-
-  if (codeFromParams) {
-    window.localStorage.setItem('code', codeFromParams);
-    return codeFromParams;
+  try {
+    const storage = localStorage.getItem(STORAGE_KEY)
+    const credentials = JSON.parse(storage || 'null') as Credentials | null;
+    return credentials?.access_token ? credentials : null;
+  } catch (error) {
+    throw new Error(`Error retriving credentials: ${error}`);
   }
 }
 
-function goToAtlassianOAuth() {
-  window.location.href = `https://auth.atlassian.com/authorize?audience=api.atlassian.com&client_id=q7BPfsrFgPvZPMVOSoqIEoT49ajnSIOh&scope=read%3Ame&redirect_uri=https%3A%2F%2Fbitbucket-dashboard.vercel.app&response_type=code&prompt=consent`
+function saveCredentialsToStorage() {
+  try {
+    const credentials = window.location.hash
+      .replace('#', '')
+      .split('&')
+      .map(param => {
+        const [key, value] = param.split('=')
+        return { [key]: value };
+      })
+      .reduce((params, param) => ({ ...params, ...param }), {}) as Credentials;
+    
+    // Moves credentials to localstorage
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(credentials));
+    location.hash = '';
+
+    return true;
+  } catch (error) {
+    throw new Error(`Error saving credentials: ${error}`);
+  }
+}
+
+function hasTokenInUrl() {
+  return location.hash.includes('access_token=');
+}
+
+function redirectToLogin() {
+  window.location.href = `https://bitbucket.org/site/oauth2/authorize?client_id=${CLIENT_ID}&response_type=token`
+}
+
+type Credentials = {
+  access_token: string;
+  scopes: string;
+  spires_in: string;
+  token_type: string;
 }
