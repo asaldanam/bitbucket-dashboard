@@ -3,8 +3,7 @@ import * as bitbucket from "./bitbucket.auth";
 
 const api = axios.create();
 
-export default async function bitbucketApi(...routes: string[]) {
-  console.log({routes})
+export async function query(...routes: string[]) {
   const credentials = bitbucket.getCredentials();
 
   const config: AxiosRequestConfig = {

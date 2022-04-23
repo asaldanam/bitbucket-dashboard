@@ -1,14 +1,14 @@
 import type { NextPage } from 'next'
 import { useEffect } from 'react'
+import useSWR from 'swr'
 import useNotifications from '../hooks/useNotifications'
+import { query } from '../services/bitbucket/bitbucket.api'
 import * as bitbucket from '../services/bitbucket/bitbucket.auth'
-import useBitbucketApi from '../services/bitbucket/useBitbucketApi'
 
 const Home: NextPage = () => {
   const { send } = useNotifications();
-  const { data: user } = useBitbucketApi('/user');
-  console.log(user)
-  const { data: userPRs } = useBitbucketApi(() => [`pullrequests/${user.account_id}`]);
+  const { data: user } = useSWR('/user', query);
+  const { data: userPRs } = useSWR(() => [`pullrequests/${user.account_id}`], query);
 
   const reposEPs = [
     'iahorro/laravel-iahorro-2018',
@@ -16,12 +16,7 @@ const Home: NextPage = () => {
   ]
   .map(repo => `/repositories/${repo}/pullrequests?state=OPEN&pagelen=50`);
   
-  const { data: PRs } = useBitbucketApi(
-    [
-    '/repositories/iahorro/laravel-iahorro-2018/pullrequests?state=OPEN&pagelen=50',
-    '/repositories/samelan/iahorro-expertfront-ui/pullrequests?state=OPEN&pagelen=50',
-    ]
-  );
+  const { data: PRs } = useSWR(() => reposEPs, query);
 
   useEffect(() => {
     bitbucket.auth()
