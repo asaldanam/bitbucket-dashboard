@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import { useEffect } from 'react'
 import useNotifications from '../hooks/useNotifications'
-import * as bitbucket from '../services/bitbucket/bitbucketAuth'
+import * as bitbucket from '../services/bitbucket/bitbucket.auth'
 import useBitbucketApi from '../services/bitbucket/useBitbucketApi'
 
 const Home: NextPage = () => {

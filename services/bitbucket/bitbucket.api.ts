@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
-import * as bitbucket from "./bitbucketAuth";
+import * as bitbucket from "./bitbucket.auth";
 
 const api = axios.create();
 
@@ -11,7 +11,7 @@ api.interceptors.response.use(
     console.error(error.response.status)
     if (error.response.status === 401) {
       bitbucket.removeCredentials();
-      bitbucket.auth()
+      // bitbucket.auth()
     }
   }
 )
