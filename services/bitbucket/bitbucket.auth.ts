@@ -48,12 +48,20 @@ function saveCredentialsToStorage() {
   
   // Moves credentials to localstorage
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(credentials));
-  location.hash = '';
+
+  // Removes hash info from url
+  history.pushState(
+    "",
+    document.title,
+    location.pathname + location.search
+  )
 }
 
 function hasTokenInUrl() {
   return location.hash.includes('access_token=');
 }
+
+
 
 function redirectToLogin() {
   console.log('REDIRECTING TO BITBUCKET OAUTH...')
