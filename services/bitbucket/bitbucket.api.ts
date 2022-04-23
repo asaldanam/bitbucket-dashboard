@@ -10,7 +10,7 @@ api.interceptors.response.use(
     console.error(error.config)
     console.error(error.response.status)
     if (error.response.status === 401) {
-      bitbucket.removeCredentials();
+      // bitbucket.removeCredentials();
       // bitbucket.auth()
     }
   }
