@@ -18,9 +18,11 @@ export function getCredentials() {
   if (typeof window === 'undefined') return null;
   try {
     saveCredentialsToStorage();
-  
+    
+    // recovers credentials from localstorage
     const storage = window.localStorage.getItem(STORAGE_KEY)
-    const credentials = JSON.parse(storage || 'null') as Credentials | null;
+    const credentials = JSON.parse(storage || 'null') as Credentials | null;
+    
     return credentials?.access_token ? credentials : null;
   } catch (error) {
     throw new Error(`Error retriving credentials: ${error}`);
