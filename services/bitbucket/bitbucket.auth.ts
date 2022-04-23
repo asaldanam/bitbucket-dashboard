@@ -37,31 +37,36 @@ export function removeCredentials() {
 function saveCredentialsToStorage() {
   if (!hasTokenInUrl()) return;
 
-  const credentials = location.hash
-    .replace('#', '')
-    .split('&')
-    .map(param => {
-      const [key, value] = param.split('=')
-      return { [key]: value };
-    })
-    .reduce((params, param) => ({ ...params, ...param }), {}) as Credentials;
+  const credentials = getCredentialsFromUrlHash();
   
   // Moves credentials to localstorage
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(credentials));
-
-  // Removes hash info from url
-  history.pushState(
-    "",
-    document.title,
-    location.pathname + location.search
-  )
+  removeUrlHashData(); 
 }
 
 function hasTokenInUrl() {
   return location.hash.includes('access_token=');
 }
 
+function getCredentialsFromUrlHash() {
+  const credentials = location.hash
+    .replace('#', '')
+    .split('&')
+    .reduce((params, param) => {
+      const [key, value] = param.split('=');
+      return { ...params, [key]: value }
+    }, {}) as Credentials;
+  
+  return credentials;
+}
 
+function removeUrlHashData() {
+  history.pushState(
+    "",
+    document.title,
+    location.pathname + location.search
+  )
+}
 
 function redirectToLogin() {
   console.log('REDIRECTING TO BITBUCKET OAUTH...')
