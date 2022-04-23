@@ -1,7 +1,7 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
-import { useEffect, useState } from 'react'
+import type { AppProps } from 'next/app';
+import { useEffect, useState } from 'react';
 import useServiceWorker from '../hooks/useServiceWorker';
+import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [isClient, setIsClient] = useState(false);
@@ -10,7 +10,13 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   useEffect(() => setIsClient(true), []);
 
-  return isClient && <Component {...pageProps} />
+  return (
+    <div suppressHydrationWarning>
+      {typeof window === 'undefined' ? null : (
+        <Component {...pageProps} />
+      )}
+    </div>
+  )
 }
 
 export default MyApp

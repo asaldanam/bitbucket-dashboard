@@ -21,8 +21,9 @@ export async function auth() {
 }
 
 export function getCredentials() {
+  if (typeof window === 'undefined') return null;
   try {
-    const storage = localStorage.getItem(STORAGE_KEY)
+    const storage = window.localStorage.getItem(STORAGE_KEY)
     const credentials = JSON.parse(storage || 'null') as Credentials | null;
     return credentials?.access_token ? credentials : null;
   } catch (error) {
@@ -30,9 +31,14 @@ export function getCredentials() {
   }
 }
 
+export function removeCredentials() {
+  if (typeof window === 'undefined') return null;
+  const storage = window.localStorage.removeItem(STORAGE_KEY);
+}
+
 function saveCredentialsToStorage() {
   try {
-    const credentials = window.location.hash
+    const credentials = location.hash
       .replace('#', '')
       .split('&')
       .map(param => {
@@ -42,7 +48,7 @@ function saveCredentialsToStorage() {
       .reduce((params, param) => ({ ...params, ...param }), {}) as Credentials;
     
     // Moves credentials to localstorage
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(credentials));
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(credentials));
     location.hash = '';
 
     return true;
@@ -56,7 +62,8 @@ function hasTokenInUrl() {
 }
 
 function redirectToLogin() {
-  window.location.href = `https://bitbucket.org/site/oauth2/authorize?client_id=${CLIENT_ID}&response_type=token`
+  if (location.hostname === 'localhost') return;
+  location.href = `https://bitbucket.org/site/oauth2/authorize?client_id=${CLIENT_ID}&response_type=token`
 }
 
 type Credentials = {
