@@ -3,19 +3,6 @@ import * as bitbucket from "./bitbucket.auth";
 
 const api = axios.create();
 
-api.interceptors.response.use(
-  res => res,
-  error => {
-    console.error('API ERROR INTERCEPTED', error)
-    console.error(error.config)
-    console.error(error.response.status)
-    if (error.response.status === 401) {
-      // bitbucket.removeCredentials();
-      // bitbucket.auth()
-    }
-  }
-)
-
 export type BitbucketApiParams = {
   ep: string,
   version?: string;
@@ -32,8 +19,21 @@ export default async function bitbucketApi(params: BitbucketApiParams) {
     },
     ...params,
   };
-  
-  return api
-    .get(params.ep, config)
-    .then(res => res.data)
+
+  try {
+    const { data } = await api.get(params.ep, config);
+    return data;
+  } catch (error) {
+    await unauthorizedInterceptor(error);
+    throw error;
+  }
+}
+
+// Private
+
+async function unauthorizedInterceptor(error) {
+  if (error.response.status !== 401) return;
+
+  bitbucket.removeCredentials();
+  bitbucket.auth();
 }
