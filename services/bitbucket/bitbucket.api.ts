@@ -3,26 +3,22 @@ import * as bitbucket from "./bitbucket.auth";
 
 const api = axios.create();
 
-export type BitbucketApiParams = {
-  ep: string,
-  version?: string;
-} & AxiosRequestConfig;
-
-export default async function bitbucketApi(params: BitbucketApiParams) {
+export default async function bitbucketApi(...routes: string[]) {
+  console.log({routes})
   const credentials = bitbucket.getCredentials();
 
   const config: AxiosRequestConfig = {
-    baseURL: `https://api.bitbucket.org${params.version || '/2.0'}`,
+    baseURL: `https://api.bitbucket.org/2.0`,
     headers: {
       'Authorization': `Bearer ${credentials?.access_token}`,
       'Accept': 'application/json'
     },
-    ...params,
   };
 
   try {
-    const { data } = await api.get(params.ep, config);
-    return data;
+    const requests = routes.map(route => api.get(route, config).then(res => res.data))
+    const data = await Promise.all(requests);
+    return data.length > 1 ? data : data[0];
   } catch (error) {
     await unauthorizedInterceptor(error);
     throw error;

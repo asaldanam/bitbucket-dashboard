@@ -31,7 +31,7 @@ export function getCredentials() {
 
 export function removeCredentials() {
   if (typeof window === 'undefined') return null;
-  const storage = window.localStorage.removeItem(STORAGE_KEY);
+  window.localStorage.removeItem(STORAGE_KEY);
 }
 
 // Private
