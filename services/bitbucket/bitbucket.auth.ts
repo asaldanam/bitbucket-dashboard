@@ -7,12 +7,6 @@ export async function auth() {
     const credentials = getCredentials();
     if (credentials) return;
 
-    // Check if has credentials in url
-    if (hasTokenInUrl()) {
-      saveCredentialsToStorage();
-      return;
-    }
-
     // Finally, if not logued yet, redirects to login
     redirectToLogin();
   } catch (error) {
@@ -23,6 +17,8 @@ export async function auth() {
 export function getCredentials() {
   if (typeof window === 'undefined') return null;
   try {
+    saveCredentialsToStorage();
+  
     const storage = window.localStorage.getItem(STORAGE_KEY)
     const credentials = JSON.parse(storage || 'null') as Credentials | null;
     return credentials?.access_token ? credentials : null;
@@ -36,25 +32,23 @@ export function removeCredentials() {
   const storage = window.localStorage.removeItem(STORAGE_KEY);
 }
 
-function saveCredentialsToStorage() {
-  try {
-    const credentials = location.hash
-      .replace('#', '')
-      .split('&')
-      .map(param => {
-        const [key, value] = param.split('=')
-        return { [key]: value };
-      })
-      .reduce((params, param) => ({ ...params, ...param }), {}) as Credentials;
-    
-    // Moves credentials to localstorage
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(credentials));
-    location.hash = '';
+// Private
 
-    return true;
-  } catch (error) {
-    throw new Error(`Error saving credentials: ${error}`);
-  }
+function saveCredentialsToStorage() {
+  if (!hasTokenInUrl()) return;
+
+  const credentials = location.hash
+    .replace('#', '')
+    .split('&')
+    .map(param => {
+      const [key, value] = param.split('=')
+      return { [key]: value };
+    })
+    .reduce((params, param) => ({ ...params, ...param }), {}) as Credentials;
+  
+  // Moves credentials to localstorage
+  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(credentials));
+  location.hash = '';
 }
 
 function hasTokenInUrl() {
@@ -62,6 +56,7 @@ function hasTokenInUrl() {
 }
 
 function redirectToLogin() {
+  console.log('REDIRECTING TO BITBUCKET OAUTH...')
   if (location.hostname === 'localhost') return;
   location.href = `https://bitbucket.org/site/oauth2/authorize?client_id=${CLIENT_ID}&response_type=token`
 }
