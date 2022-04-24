@@ -20,8 +20,8 @@ export function usePRsPendingReview() {
         ?.approved;
 
       const needsMyReview = isFromMyTeam
-        && isNotApprovedYet
-        && !isAlreadyReviewedByMe;
+        // && isNotApprovedYet
+        // && !isAlreadyReviewedByMe;
       
       return { ...pr, needsMyReview }
     });
@@ -44,15 +44,17 @@ export function usePRsPendingReviewNotifications() {
     if (newIds.length === 0) return;
 
     newIds.forEach(id => {
-      send(``)
+      const pr = PRs.find(pr => pr.id === id);
+      send(
+        `${pr.author.display_name} has opened a new PR`,
+        {
+          icon: pr.author.links.avatar.href,
+          body: pr.title,
+          data: { url: pr.links.html.href },
+          actions: [{ action: "open_url", title: "Go to PR" }]
+        }
+      )
     })
-
-    send(`New PR: ${JSON.stringify(newIds)}`, {
-      icon: "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/618b99ff0faed3006bb7c315/55ea3d01-3fdb-4793-b670-c25588c43147/128",
-      body: 'Esto es una prueba',
-      data: { url: 'https://www.google.com' },
-      actions: [{ action: "open_url", title: "Go to bitbucket" }]
-    });
 
   }, [JSON.stringify(ids)])
 }
