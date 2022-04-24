@@ -20,8 +20,8 @@ export function usePRsPendingReview() {
         ?.approved;
 
       const needsMyReview = isFromMyTeam
-        // && isNotApprovedYet
-        // && !isAlreadyReviewedByMe;
+        && isNotApprovedYet
+        && !isAlreadyReviewedByMe;
       
       return { ...pr, needsMyReview }
     });
