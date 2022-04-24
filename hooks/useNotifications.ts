@@ -6,11 +6,11 @@ export default function () {
     Notification.requestPermission();
   }, []);
 
-  async function send(msg: string) {
+  async function send(title: string, options?: NotificationOptions) {
     if (Notification.permission !== 'granted') return;
 
     const sw = await navigator.serviceWorker.getRegistration();
-    sw?.showNotification(msg);
+    sw?.showNotification(title, options);
   }
 
   return { send }

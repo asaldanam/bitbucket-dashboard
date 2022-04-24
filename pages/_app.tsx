@@ -1,7 +1,8 @@
 import type { AppProps } from 'next/app';
 import { useEffect, useState } from 'react';
 import useServiceWorker from '../hooks/useServiceWorker';
-import '../styles/globals.css';
+import '@atlaskit/css-reset/dist/bundle.css';
+import { PullRequestStore } from 'stores/PullRequestStore';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [isClient, setIsClient] = useState(false);
@@ -13,7 +14,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <div suppressHydrationWarning>
       {typeof window === 'undefined' ? null : (
-        <Component {...pageProps} />
+        <PullRequestStore.Provider>
+          <Component {...pageProps} />
+        </PullRequestStore.Provider>
       )}
     </div>
   )

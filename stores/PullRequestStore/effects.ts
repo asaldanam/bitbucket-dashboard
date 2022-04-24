@@ -1,8 +1,5 @@
 import BitbucketApi from "services/bitbucket/api";
 
-const USER = '618b99ff0faed3006bb7c315';
-const TEAM = ['5cd97b979435c90fd6eff0cf']
-
 export const PullRequestsEffects = {
   async getPrs(payload: {
     repos: string[];
@@ -11,7 +8,6 @@ export const PullRequestsEffects = {
     pagelen: string;
     fields: string;
   }) {
-
     const { repos, sortBy, ...params } = payload;
 
     // Queries the OPEN PRs list of provided repositories
@@ -21,35 +17,19 @@ export const PullRequestsEffects = {
           .map(repo => BitbucketApi.get(`/repositories/${repo}/pullrequests`, { params }))
       )
     )
-    // Merges all repos PRs
-    .reduce((PRs, repo) => ([...PRs, ...repo.values]), [])
-
+    .reduce((PRs, repo) => ([...PRs, ...repo.values]), []) // Merges all repos PRs
 
     // Queries all activity logs for listed PRs
     const details = (
       await Promise.all(
         list
-          .map(pr => {
-            const detailUrl = `/repositories/${pr.source.repository.full_name}/pullrequests/${pr.id}`
-            return Promise.all([
-              BitbucketApi.get(detailUrl),
-              BitbucketApi.get(`${detailUrl}/activity`).then(d => d.values),
-            ])
-            .then(([detail, activity]) => ({...detail, activity}));
-          })
+          .map(pr => BitbucketApi.get(`/repositories/${pr.source.repository.full_name}/pullrequests/${pr.id}`))
       )
     )
-    .sort((a, b) => (a[sortBy] > b[sortBy]) ? -1 : 1);
+    .sort((a, b) => (a[sortBy] > b[sortBy]) ? -1 : 1); // Sort by a primary attribute
+    
+    console.log(details);
 
-    // const pendingReviewLogs = PRDetails
-    //   .filter(({ activity, author }) => {
-    //     const needsReview = activity.filter(log => log.approval).length < 4;
-    //     const alreadyReviewed = activity.some(log => log.approval?.user.account_id === USER);
-    //     const isFromMyTeam = TEAM.includes(author.account_id)
-    //     return needsReview && isFromMyTeam && !alreadyReviewed;
-    //   });
-
-    console.log(details)
     return details;
   }
 }

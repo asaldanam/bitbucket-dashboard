@@ -1,3 +1,4 @@
+import { useInterval } from "hooks/useInterval";
 import createContextStore, { useContextStoreState } from "libs/createContextStore";
 import { useEffect } from "react";
 import { PullRequestsEffects } from "./effects";
@@ -14,7 +15,11 @@ export const PullRequestStore = createContextStore(
       fetch()
     }, []);
 
-    async function fetch() {
+    useInterval(() => {
+      fetch();
+    }, 1000 * 600)
+    
+    const fetch = async () => {
       dispatch({ loading: true })
       try {
         dispatch({

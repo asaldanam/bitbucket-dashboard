@@ -9,6 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@atlaskit/avatar": "^20.5.8",
+    "@atlaskit/avatar-group": "^8.5.12",
+    "@atlaskit/css-reset": "^6.3.10",
+    "@atlaskit/dynamic-table": "^14.5.3",
+    "@atlaskit/lozenge": "^11.1.9",
     "axios": "^0.26.1",
     "next": "12.1.0",
     "react": "17.0.2",
