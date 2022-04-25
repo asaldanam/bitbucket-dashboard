@@ -14,7 +14,8 @@ const BitbucketApi = {
     };
 
     try {
-      return axios.get(url, {...baseConfig, ...(config || {})}).then(res =>  res.data);
+      const { data } = await axios.get(url, { ...baseConfig, ...(config || {}) })
+      return data;
     } catch (error: any) {
       if (error.response.status !== 401) {
         bitbucket.removeCredentials();
