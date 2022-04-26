@@ -53,8 +53,8 @@ export function usePullRequestsPolling() {
   }, 1000 * 60 * minutes)
 }
 
-/** Starts  */
-export function usePullRequestsNotifications() {
+/** Sends a notification on new opened pull requests  */
+export function usePendingReviewNotifications() {
   const { send } = useNotifications()
   const { state: { data: PRs } } = usePullRequestWithReview();
   

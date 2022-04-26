@@ -1,13 +1,13 @@
 import PendingReviewsTable from 'modules/PendingReviewsTable'
 import type { NextPage } from 'next'
 import { useBitbucketAuth } from 'services/bitbucket/hooks'
-import { usePullRequestsNotifications, usePullRequestsPolling } from 'stores/PullRequestStore/hooks'
+import { usePendingReviewNotifications, usePullRequestsPolling } from 'stores/PullRequestStore/hooks'
 import styled, { css } from 'styled-components'
 
 const Home: NextPage = () => {
   useBitbucketAuth();
   usePullRequestsPolling();
-  usePullRequestsNotifications();
+  usePendingReviewNotifications();
 
   return (
     <Root>
