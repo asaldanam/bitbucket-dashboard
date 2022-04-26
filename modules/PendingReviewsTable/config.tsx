@@ -24,7 +24,7 @@ export const createRowsFromPrs = (prs: any[]) => {
             <div>
               <Title onClick={() => window.open(pr.links.html.href, '_blank')}><a href={pr.links.html.ref}>#{pr.id}</a> {pr.title}</Title>
               <Branches>
-                <div>{pr.source.branch.name}</div>
+                <SourceBranch>{pr.source.branch.name}</SourceBranch>
                 <ArrowRightIcon size="small" label="" />
                 <Lozenge>{pr.destination.branch.name}</Lozenge>
               </Branches>
@@ -48,7 +48,9 @@ export const createRowsFromPrs = (prs: any[]) => {
               .map(participant => ({
                 src: participant.user.links.avatar.href,
                 status: (participant.state === 'changes_requested' && 'declined') || participant.state,
-                borderColor: 'red'
+                borderColor: 'red',
+                name: participant.user.display_name,
+
               }))
               .sort((a, b) => (a.status > b.status) ? -1 : 1)
             }
@@ -65,7 +67,7 @@ export const createRowsFromPrs = (prs: any[]) => {
 const Container = styled.div`
   ${({ theme }) => css`
     display: flex;
-    /* align-items: center; */
+    align-items: center;
     padding: 4px 0;
     & > *:not(:last-child) {
       margin-right: 8px;
@@ -78,14 +80,24 @@ const Container = styled.div`
 
 const Title = styled.div`
   cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const Branches = styled.div`
   display: flex;
   align-items: center;
   /* margin-bottom: 2px; */
-  transform: scale(0.85) translateY(1px);
+  transform: scale(0.8) translateY(1px);
   transform-origin: center left;
   opacity: 0.8;
   line-height: 1.2;
+  position: relative;
+  bottom: -1px;
+`
+
+const SourceBranch = styled.div`
+  position: relative;
+  bottom: 1px;
 `

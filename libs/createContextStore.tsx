@@ -34,3 +34,7 @@ export function useContextStoreState<S extends {[key: string]: any}>(initialStat
 
   return { state, dispatch, setState };
 }
+
+type a = ReturnType<typeof createContextStore>
+
+type StoreInstance = ReturnType<typeof createContextStore>

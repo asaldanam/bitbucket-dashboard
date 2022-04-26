@@ -1,6 +1,6 @@
 import type { AppProps } from 'next/app';
 import { useEffect, useState } from 'react';
-import useServiceWorker from '../hooks/useServiceWorker';
+import useServiceWorker from '../shared/hooks/useServiceWorker';
 import '@atlaskit/css-reset/dist/bundle.css';
 import { PullRequestStore } from 'stores/PullRequestStore';
 
