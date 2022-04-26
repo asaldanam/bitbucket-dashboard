@@ -16,7 +16,7 @@ const PendingReviewsTable = ({ }: PendingReviewsTableProps) => {
           <DynamicTable
               head={head}
               rows={table.rows}
-              rowsPerPage={20}
+              rowsPerPage={table.rowsPerPage}
               defaultPage={1}
               loadingSpinnerSize="small"
               isLoading={showSpinner}
