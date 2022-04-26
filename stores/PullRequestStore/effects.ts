@@ -27,8 +27,6 @@ export const PullRequestsEffects = {
       )
     )
     .sort((a, b) => (a[sortBy] > b[sortBy]) ? -1 : 1); // Sort by a primary attribute
-    
-    console.log(details);
 
     return details;
   }

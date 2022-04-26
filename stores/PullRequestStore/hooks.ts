@@ -29,8 +29,12 @@ export function usePullRequestWithReview() {
       
       return { ...pr, needsMyReview, isFromMyTeam, isNotApprovedYet, isAlreadyReviewedByMe, itsMine }
     });
+  
+  const newState = { ...state, data: dataWithReview };
+  
+  console.log(newState)
 
-  return { state: { ...state, data: dataWithReview }, actions }
+  return { state: newState, actions }
 }
 
 /** Starts polling of PRs table  */
@@ -57,18 +61,15 @@ export function usePullRequestsNotifications() {
   const ids = PRs.filter(pr => pr.needsMyReview).map(pr => pr.id)
   const prevIds = usePrevious(ids);
 
-  console.log('usePullRequestsNotifications', PRs)
-
   async function sendPRNotification(pr) {
-    send(
-      `${pr.author.display_name} has opened a new PR`,
-      {
-        icon: pr.author.links.avatar.href,
-        body: pr.title,
-        data: { url: pr.links.html.href },
-        actions: [{ action: "open_url", title: "Go to PR" }]
-      }
-    )
+    const { msg, ...options } = {
+      msg: `${pr.author.display_name} has opened a new PR`,
+      icon: pr.author.links.avatar.href,
+      body: pr.title,
+      data: { url: pr.links.html.href },
+      actions: [{ action: "open_url", title: "Go to PR" }]
+    }
+    send(msg, options);
   }
 
   useEffect(() => {
@@ -77,8 +78,6 @@ export function usePullRequestsNotifications() {
     
     // Detect new IDs from last fetch
     const newIds = ids.filter(id => !prevIds?.includes(id));
-    
-    console.log({ids, prevIds, newIds});
 
     // Prevent send when 
     if (newIds.length === 0) return;
