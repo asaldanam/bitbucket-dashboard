@@ -10,6 +10,8 @@ const Home: NextPage = () => {
   usePullRequestsPolling();
   usePendingReviewNotifications();
 
+  console.log('RELEASE V2')
+
   return (
     <Root>
       <PendingReviewsTable />
