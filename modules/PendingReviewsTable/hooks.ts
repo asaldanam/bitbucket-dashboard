@@ -1,4 +1,4 @@
-import { usePullRequestWithReview } from "stores/PullRequestStore/hooks";
+import usePullRequestWithReview from "stores/PullRequestStore/usePullRequestWithReview";
 import { createRowsFromPrs } from "./config";
 
 /** Exposes pull requests list with detailed information about reviewing process */

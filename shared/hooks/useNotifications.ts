@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export default function () {
+export default function useNotifications() {
   useEffect(() => {
     if (Notification.permission === 'granted') return;
     Notification.requestPermission();
