@@ -1,4 +1,5 @@
 import createContextStore, { useContextStoreState } from "libs/createContextStore";
+import { REPOS_WATCHING } from "stores/ConfigStore";
 import { PullRequestsEffects } from "./effects";
 
 export const PullRequestStore = createContextStore(
@@ -13,8 +14,8 @@ export const PullRequestStore = createContextStore(
       dispatch({ loading: true })
       try {
         dispatch({
-          data: await PullRequestsEffects.getPrs({
-            repos: ['iahorro/laravel-iahorro-2018', 'samelan/iahorro-expertfront-ui'],
+          data: await PullRequestsEffects.fetchPullRequests({
+            repos: REPOS_WATCHING,
             state: 'OPEN',
             pagelen: '50',
             fields: 'values.id,values.updated_on,values.source.repository.full_name,values.links',

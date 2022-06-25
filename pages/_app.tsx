@@ -5,11 +5,15 @@ import '@atlaskit/css-reset/dist/bundle.css';
 import { PullRequestStore } from 'stores/PullRequestStore';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [isClient, setIsClient] = useState(false);
+  const [, setIsClient] = useState(false);
 
   useServiceWorker();
 
-  useEffect(() => setIsClient(true), []);
+  useEffect(() => {
+    setIsClient(true)
+    console.log('RELEASE V2')
+  }, []);
+
 
   return (
     <div suppressHydrationWarning>

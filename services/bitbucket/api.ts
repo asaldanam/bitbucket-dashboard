@@ -21,17 +21,10 @@ const BitbucketApi = {
         bitbucket.removeCredentials();
         bitbucket.auth();
       }
+
       throw error;
     }
   },
 };
 
 export default BitbucketApi;
-
-// Private
-async function unauthorizedInterceptor(error) {
-  if (error.response.status !== 401) return;
-
-  bitbucket.removeCredentials();
-  bitbucket.auth();
-}

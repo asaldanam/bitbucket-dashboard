@@ -7,14 +7,11 @@ export default function usePullRequestWithReview() {
 
   const data = createPRListWithReview(state);
 
-  console.log(data)
-
   return { state: { ...state, data }, actions }
 }
 
 
 // ---- Adapters
-
 
 /** Adapts PR list data adding review calc info */
 function createPRListWithReview(state) {
