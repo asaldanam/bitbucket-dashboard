@@ -1,3 +1,4 @@
+import PendingCommentsFeed from 'modules/PendingCommentsFeed'
 import PendingReviewsTable from 'modules/PendingReviewsTable'
 import type { NextPage } from 'next'
 import { useBitbucketAuth } from 'services/bitbucket/hooks'
@@ -13,6 +14,7 @@ const Home: NextPage = () => {
   return (
     <Root>
       <PendingReviewsTable />
+      <PendingCommentsFeed />
     </Root>
   )
 }
@@ -21,8 +23,12 @@ export default Home;
 
 const Root = styled.div`
   ${({ theme }) => css`
-    max-width: 960px;
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 48px 16px;
+    padding: 0 48px 16px;
+    
+    display: grid;
+    grid-template-columns: minmax(300px, 7fr) minmax(250px, 3fr);
+    grid-gap: 24px;
   `}
 `;

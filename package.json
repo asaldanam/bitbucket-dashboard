@@ -11,6 +11,7 @@
   "dependencies": {
     "@atlaskit/avatar": "^20.5.8",
     "@atlaskit/avatar-group": "^8.5.12",
+    "@atlaskit/comment": "^10.5.2",
     "@atlaskit/css-reset": "^6.3.10",
     "@atlaskit/dynamic-table": "^14.5.3",
     "@atlaskit/lozenge": "^11.1.9",

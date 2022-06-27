@@ -30,14 +30,25 @@ async function fetchPullRequests(payload: {
 /** Fetches Pull Request detail */
 async function fetchPullRequestDetail(pr) {
   const path = `/repositories/${pr.source.repository.full_name}/pullrequests/${pr.id}`
-  
+
   const [detail, comments] = await Promise.all([
     BitbucketApi.get(path),
-    BitbucketApi.get(`${path}/comments`),
+    fetchPullRequestComments(pr),
   ])
 
   return {
     ...detail,
     comments
   }
+}
+
+async function fetchPullRequestComments(pr) {
+  const path = `/repositories/${pr.source.repository.full_name}/pullrequests/${pr.id}/comments`
+  const params = {
+    fields: '+values.parent.*',
+  }
+
+  const comments = await BitbucketApi.get(path, { params });
+
+  return comments;
 }

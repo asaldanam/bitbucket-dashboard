@@ -33,7 +33,9 @@ export default PendingReviewsTable;
 /** Styled components */
 
 const Root = styled.div`
-  ${({ theme }) => css``}
+  ${({ theme }) => css`
+    padding-top: 48px;
+  `}
 `;
 
 const Title = styled.h4`
