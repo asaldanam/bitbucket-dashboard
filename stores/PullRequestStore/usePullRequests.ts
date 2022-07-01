@@ -1,8 +1,8 @@
-import { TEAM, USER } from "stores/ConfigStore";
+import { APPROVALS, TEAM, USER } from "stores/ConfigStore";
 import { PullRequestStore } from ".";
 
 /** Exposes pull requests list with detailed information about reviewing process */
-export default function usePullRequestWithReview() {
+export default function usePullRequests() {
   const { state, actions } = PullRequestStore.useContext();
 
   const data = createPRListWithReview(state);
@@ -19,9 +19,10 @@ function createPRListWithReview(state) {
     .map(pr => {
       const isFromMyTeam = TEAM.includes(pr.author.nickname.toLowerCase());
 
-      const isNotApprovedYet =
-        pr.participants.filter(participant => participant.approved).length < 4 ||
-        pr.participants.some(participant => participant.state === 'changes_requested');
+      const approves = pr.participants.filter(participant => participant.approved).length;
+      const requestedChanges = pr.participants.filter(participant => participant.state === 'changes_requested').length
+
+      const isApproved = approves >= APPROVALS && requestedChanges === 0;
       
       const itsMine = pr.author.nickname.toLowerCase() === USER
       
@@ -30,9 +31,9 @@ function createPRListWithReview(state) {
         ?.approved;
 
       const needsMyReview = isFromMyTeam
-        && isNotApprovedYet
+        && !isApproved
         && !isAlreadyReviewedByMe;
       
-      return { ...pr, needsMyReview, isFromMyTeam, isNotApprovedYet, isAlreadyReviewedByMe, itsMine }
+      return { ...pr, needsMyReview, isFromMyTeam, isApproved, isAlreadyReviewedByMe, itsMine, approves, requestedChanges }
     });
 }

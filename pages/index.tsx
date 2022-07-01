@@ -25,7 +25,7 @@ const Root = styled.div`
   ${({ theme }) => css`
     max-width: 1280px;
     margin: 0 auto;
-    padding: 0 48px 16px;
+    padding: 0 16px;
     
     display: grid;
     grid-template-columns: minmax(300px, 7fr) minmax(250px, 3fr);

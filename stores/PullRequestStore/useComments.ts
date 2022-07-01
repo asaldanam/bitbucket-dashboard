@@ -1,8 +1,8 @@
 import { USER } from "stores/ConfigStore";
-import usePullRequestWithReview from "./usePullRequestWithReview";
+import usePullRequests from "./usePullRequests";
 
-export default function usePullRequestsComments() {
-  const { state: { data, ...state }, actions } = usePullRequestWithReview();
+export default function useComments() {
+  const { state: { data, ...state }, actions } = usePullRequests();
   const comments = createCommentsList(data);
 
   return { state: { ...state, comments }, actions }  
@@ -19,7 +19,7 @@ function createCommentsList(prs) {
     .map((comment) => mapWithDerivedInfo(comment, comments))
     .sort(sortByCommentUpdateDate)
   
-  console.log(commentsWithDerivedInfo)
+  console.log(commentsWithDerivedInfo.filter(c => c.isForMe))
   
   // console.log(commentsWithDerivedInfo.filter(c => c.isForMe).map(c => c.content.raw))
   

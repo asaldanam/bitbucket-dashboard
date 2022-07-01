@@ -1,4 +1,4 @@
-import usePullRequestsComments from "stores/PullRequestStore/usePullRequestsComments";
+import useComments from "stores/PullRequestStore/useComments";
 import styled, { css } from "styled-components";
 
 import Avatar from '@atlaskit/avatar';
@@ -6,7 +6,6 @@ import Avatar from '@atlaskit/avatar';
 import Comment, {
   CommentAction,
   CommentAuthor,
-  CommentEdited,
   CommentTime,
 } from '@atlaskit/comment';
 import { USER } from "stores/ConfigStore";
@@ -15,14 +14,15 @@ import { FC } from "react";
 export interface PendingCommentsFeedProps {}
 
 const PendingCommentsFeed = ({ }: PendingCommentsFeedProps) => {
-  const { state: { comments } } = usePullRequestsComments()
+  const { state: { comments } } = useComments();
+  
   return (
     <Root>
       <Title>My Comments</Title>
       {comments
         .filter(comment => comment.isForMe && !replyOf(comment))
         .map(comment => (
-          <StyledComment key={comment.id}>
+          <StyledComment key={comment.id} disabled={comment.pullrequest.isApproved}>
             <CommentItem comment={comment}>
               {replyOf(comment) && <CommentItem comment={replyOf(comment)} />}
             </CommentItem>
@@ -31,7 +31,7 @@ const PendingCommentsFeed = ({ }: PendingCommentsFeedProps) => {
       {comments
         .filter(comment => comment.isForMe && replyOf(comment))
         .map(comment => (
-          <StyledComment key={comment.id} replied>
+          <StyledComment key={comment.id} disabled>
             <CommentItem comment={comment}>
               {replyOf(comment) && <CommentItem comment={replyOf(comment)} />}
             </CommentItem>
@@ -57,10 +57,10 @@ const CommentItem: FC<any> = ({ comment, children }) => {
         author={<CommentAuthor>{comment.user.display_name}</CommentAuthor>}
         // time={<CommentTime>Mar 14, 2022</CommentTime>}
         content={<Content>{comment.content.raw}</Content>}
-        actions={[
-          <Link key="reply" href={comment.links.html.href} target="_blank">
+      actions={[
+          <CommentAction key="show-more" onClick={() => window.open(comment.links.html.href, '_blank')}>
             Show more
-          </Link>,
+          </CommentAction>,
         ]}
       >
         {children}
@@ -76,6 +76,7 @@ const Root = styled.div`
   ${({ theme }) => css`
     background-color: rgb(250, 251, 252);
     padding: 48px 24px;
+    height: 100%;
   `}
 `;
 
@@ -89,20 +90,14 @@ const Content = styled.div`
   `}
 `;
 
-const StyledComment = styled.div<{ replied?: boolean }>`
-  ${({ replied }) => css`
+const StyledComment = styled.div<{ disabled?: boolean }>`
+  ${({ disabled }) => css`
     background: white;
     border-radius: 4px;
     box-shadow: rgb(9 30 66 / 25%) 0px 1px 1px, rgb(9 30 66 / 31%) 0px 0px 1px;
     margin-bottom: 12px;
     padding: 16px;
-    opacity: ${replied ? '0.5' : '1'};
-  `}
-`;
-
-const Link = styled.a`
-  ${({ theme }) => css`
-    font-size: 12px;
+    opacity: ${disabled ? '0.5' : '1'};
   `}
 `;
 

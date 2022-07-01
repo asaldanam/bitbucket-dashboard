@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "sw:build": "tsc --project sw/tsconfig.json --outDir public"
   },
   "dependencies": {
     "@atlaskit/avatar": "^20.5.8",

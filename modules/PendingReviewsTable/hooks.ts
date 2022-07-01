@@ -1,9 +1,9 @@
-import usePullRequestWithReview from "stores/PullRequestStore/usePullRequestWithReview";
+import usePullRequests from "stores/PullRequestStore/usePullRequests";
 import { createRowsFromPrs } from "./config";
 
 /** Exposes pull requests list with detailed information about reviewing process */
 export function usePendingReviewsTableData() {
-  const { state: { data, loading } } = usePullRequestWithReview();
+  const { state: { data, loading } } = usePullRequests();
   
   return {
     tables: [

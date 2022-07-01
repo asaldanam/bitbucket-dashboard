@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import useNotifications from "shared/hooks/useNotifications";
 import { usePrevious } from "shared/hooks/usePrevious";
-import usePullRequestWithReview from "./usePullRequestWithReview";
+import usePullRequests from "./usePullRequests";
 
 /** Sends a notification on new opened pull requests  */
 export function usePendingReviewNotifications() {
   const { send } = useNotifications()
-  const { state: { data: PRs } } = usePullRequestWithReview();
+  const { state: { data: PRs } } = usePullRequests();
   
   const ids = PRs.filter(pr => pr.needsMyReview).map(pr => pr.id)
   const prevIds = usePrevious(ids);

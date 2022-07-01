@@ -72,7 +72,7 @@ const Container = styled.div`
     & > *:not(:last-child) {
       margin-right: 8px;
     }
-    & > *:first-child {
+    & > *:first-of-type {
       margin-top: 2px;
     }
   `}

@@ -4,6 +4,7 @@
 
 export const REPOS_WATCHING = UNESTABLE_fromLocalStorage('CONFIG_REPOS_WATCHING', ['iahorro/laravel-iahorro-2018', 'samelan/iahorro-expertfront-ui'])
 export const POLLING_INTERVAL_MINS = parseInt(UNESTABLE_fromLocalStorage('CONFIG_POLLING_INTERVAL_MINS', '1'))
+export const APPROVALS = parseInt(UNESTABLE_fromLocalStorage('CONFIG_APPROVALS', '3'))
 export const USER = UNESTABLE_fromLocalStorage('CONFIG_USER', 'asaldana')?.toLowerCase();
 export const TEAM = UNESTABLE_fromLocalStorage('CONFIG_TEAM', ['asaldana', 'iana rusu', 'Alejandro Manjón Gómez', 'Beatriz Vallejo', 'sergio.zarzuelo', 'José Luis Fernández Pérez'])
   ?.filter(member => member.toLowerCase() !== USER)

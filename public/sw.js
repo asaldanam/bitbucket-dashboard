@@ -2,7 +2,7 @@
 self.addEventListener("install", App);
 
 function App() {
-  // initPolling();
+//   initPolling();
 
   self.addEventListener('notificationclick', function(event) {
     switch(event.action) {
@@ -16,10 +16,10 @@ function App() {
   }, false);
 }
 
-// function initPolling() {
-//   setInterval(notify, 5000)
-// }
+function initPolling() {
+  setInterval(notify, 5000)
+}
 
-// function notify() {
-//   self.registration.showNotification(new Date().toISOString());
-// }
+function notify() {
+  self.registration.showNotification(new Date().toISOString());
+}
