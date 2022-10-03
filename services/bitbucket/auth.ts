@@ -73,9 +73,7 @@ function removeUrlHashData() {
 function redirectToLogin() {
   console.log('REDIRECTING TO BITBUCKET OAUTH...')
   if (location.hostname === 'localhost') return;
-  setTimeout(() => {
-    location.href = `https://bitbucket.org/site/oauth2/authorize?client_id=${CLIENT_ID}&response_type=token`
-  }, 500)
+  location.href = `https://bitbucket.org/site/oauth2/authorize?client_id=${CLIENT_ID}&response_type=token`
 }
 
 type Credentials = {
