@@ -10,7 +10,9 @@ export function usePullRequestsPolling() {
 
   // First load
   useEffect(() => {
-    actions.fetch()
+    setTimeout(() => {
+      actions.fetch()
+    }, 1000);
   }, []);
 
   // Polling
